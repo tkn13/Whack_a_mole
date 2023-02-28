@@ -1,6 +1,6 @@
 public class Main{
     public static void main(String[] args) {
-        CoreGUI c = new CoreGUI();
-        c.initialize();
+        CoreGUI a = new CoreGUI();
+        a.initialize();
     }
 }

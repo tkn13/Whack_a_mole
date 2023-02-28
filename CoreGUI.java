@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.*;
+import java.util.Timer;
 import javax.swing.*;
 
 public class CoreGUI {
@@ -14,6 +17,8 @@ public class CoreGUI {
     private JPanel gridPanelContainer;
     private JLabel scoreLabel;
     private JPanel heart;
+    private ArrayList<Mole>arrM = new ArrayList<>();
+    private Timer timer = new Timer();
 
     public void initialize(){
         f = new JFrame("Whack a Mole!");
@@ -22,7 +27,7 @@ public class CoreGUI {
         detailComponents();
         f.setVisible(true);
         f.setResizable(false);
-        devMode();
+        //devMode();
     }
     private void devMode(){
         headPanel.setBackground(Color.blue);
@@ -50,6 +55,13 @@ public class CoreGUI {
         f.add(bodyRightContainer,BorderLayout.LINE_END);
         f.add(bodyPanel,BorderLayout.CENTER);
         f.add(footPanel,BorderLayout.PAGE_END);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+               movemole();
+            }
+        }, 0, 1500);
     }
 
     private void drawHeadPanel(){
@@ -98,7 +110,10 @@ public class CoreGUI {
         gridPanel = new JPanel();
         gridPanelContainer = new JPanel();
         for(int i = 0; i < 9; i++){
-            gridPanel.add(new Mole());
+            Mole m = new Mole();
+            m.setID(i);
+            arrM.add(m);
+            gridPanel.add(m);
         }
         gridPanel.setLayout(new GridLayout(3,3,50,30));
         gridPanelContainer.add(gridPanel);
@@ -109,5 +124,30 @@ public class CoreGUI {
     private void drawFootPanel(){
         footPanel = new JPanel();
         footPanel.setPreferredSize(new Dimension(1280,50));
+    }
+
+    public ArrayList<Mole> getMoles(){
+        return arrM;
+    }
+
+    private void movemole(){
+        Random random = new Random();   
+        Integer x = random.nextInt(9);   
+        // for(int i = 0; i<9; i++){
+
+        // }
+        for (Component c : gridPanel.getComponents()) {
+            if (c instanceof Mole){
+                Mole dp = (Mole) c;
+                int h = dp.getID();
+                if (h == x){
+                    dp.toel();
+                    System.out.printf(""+h+" this this\n");
+                }
+                else {
+                    dp.tohole();
+                }
+            }
+        }
     }
 }
