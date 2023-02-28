@@ -9,6 +9,7 @@ public class Mole extends JButton {
     public Icon holepic;
     public Integer Id = 0;
     public Icon el;
+    public boolean clickme = false;
     AllButtonListener bl = new AllButtonListener();
     public Mole(){
         try{
@@ -41,6 +42,11 @@ public class Mole extends JButton {
         public void actionPerformed(ActionEvent ev){
             // JButton source = (JButton)ev.getSource();
             System.out.println(getID());
+            if(clickme){
+                tohole();
+                System.out.printf(""+"HIT\n");
+                clickme = false;
+            }
         }
     }
 }

@@ -59,6 +59,16 @@ public class CoreGUI {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                for (Component c : gridPanel.getComponents()) {
+                    if (c instanceof Mole){
+                        Mole dp = (Mole) c;
+                        if (dp.clickme){
+                            dp.tohole();
+                            System.out.printf(""+"HIDE\n");
+                            dp.clickme = false;
+                        }
+                        }
+                    }
                movemole();
             }
         }, 0, 1500);
@@ -142,7 +152,8 @@ public class CoreGUI {
                 int h = dp.getID();
                 if (h == x){
                     dp.toel();
-                    System.out.printf(""+h+" this this\n");
+                    dp.clickme = true;
+                    System.out.printf(""+"SHOW\n");
                 }
                 else {
                     dp.tohole();
