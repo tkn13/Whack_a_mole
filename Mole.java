@@ -4,48 +4,71 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-
 public class Mole extends JButton {
-    public Icon holepic;
-    public Integer Id = 0;
-    public Icon el;
-    public boolean clickme = false;
+    private Icon hole;
+    private Icon mole;
+    private Icon prepareToShow;
+    private Icon prepareToHide;
+    private String state = "hide"; // hide,perpareToShow,showing,perpareToHide
+    private int TypeOfMole; // It can be Type 1,2,3 each type have different score
+    private int id;
     AllButtonListener bl = new AllButtonListener();
-    public Mole(){
-        try{
-			holepic = new ImageIcon("images/hole.png");
-			el = new ImageIcon("images/el.png");
-		}
-		catch(Exception e){
-			System.out.println(e);
-		}
-       
-        this.setPreferredSize(new Dimension(150,150));
-        this.setIcon(holepic);
-        this.setBackground(Color.green);
+
+    public Mole() {
+        try {
+            hole = new ImageIcon("images/hole.png");
+            mole = new ImageIcon("images/showing.png");
+            prepareToShow = new ImageIcon("images/prepareToShow.png");
+            prepareToHide = new ImageIcon("images/prepareToHide.png");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        this.setPreferredSize(new Dimension(150, 150));
+        this.setIcon(hole);
         this.addActionListener(bl);
     }
-    public void toel(){
-        this.setIcon(el);
+
+    public void prepareToShowing() {
+        state = "prepareToShow";
+        setIcon(prepareToShow);
     }
-    public void tohole(){
-        this.setIcon(holepic);
+
+    public void hideing() {
+        state = "hole";
+        setIcon(hole);
     }
-    public void setID(int id){
-        this.Id = id;
+
+    public void showing() {
+        state = "showing";
+        setIcon(mole);
     }
-    public int getID(){
-        return(Id);
+
+    public void prepareToHide() {
+        state = "prepareToHide";
+        setIcon(prepareToHide);
     }
-    private class AllButtonListener implements ActionListener{
+
+    public String getState() {
+        return state;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    private class AllButtonListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent ev){
+        public void actionPerformed(ActionEvent ev) {
             // JButton source = (JButton)ev.getSource();
-            System.out.println(getID());
-            if(clickme){
-                tohole();
-                System.out.printf(""+"HIT\n");
-                clickme = false;
+            if (state.equals("showing")) {
+                state = "hide";
+                System.out.printf("" + "HIT\n");
+                setIcon(hole);
             }
         }
     }
