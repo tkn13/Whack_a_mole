@@ -16,10 +16,10 @@ public class Mole extends JButton {
 
     public Mole() {
         try {
-            hole = new ImageIcon("images/hole.png");
-            mole = new ImageIcon("images/showing.png");
-            prepareToShow = new ImageIcon("images/prepareToShow.png");
-            prepareToHide = new ImageIcon("images/prepareToHide.png");
+            hole = new ImageIcon("image/hole.png");
+            mole = new ImageIcon("image/showing.png");
+            prepareToShow = new ImageIcon("image/prepareToShow.png");
+            prepareToHide = new ImageIcon("image/prepareToHide.png");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -68,6 +68,8 @@ public class Mole extends JButton {
             if (state.equals("showing")) {
                 state = "hide";
                 System.out.printf("" + "HIT\n");
+                CoreGUI.scor++;
+                System.out.printf("" + "%d\n" , CoreGUI.scor);
                 setIcon(hole);
             }
         }

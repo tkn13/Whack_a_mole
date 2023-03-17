@@ -2,9 +2,8 @@ public class Main {
     public static void main(String[] args) {
         CoreGUI a = new CoreGUI();
         a.initialize();
-        while (a.stopBtnBoolean) {
+        while (true/*a.stopBtnBoolean*/) {
             a.playingDelayVersion();
-
         }
     }
 }

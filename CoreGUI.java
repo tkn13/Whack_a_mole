@@ -19,6 +19,7 @@ public class CoreGUI {
     int multiHole = 0;
     int probMultiHole;
     boolean stopBtnBoolean = true;
+    public static int scor = 0;
 
     public void initialize() {
         f = new JFrame("Whack a Mole!");
@@ -205,7 +206,7 @@ public class CoreGUI {
                 arrpos[j] = temppos;
             }
         }
-        // System.out.println(Arrays.toString(arrpos));
+         System.out.println(Arrays.toString(arrpos));
 
         // Cycle of showing mole
         for (int m = 0; m < multiHole; m++) {
