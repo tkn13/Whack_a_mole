@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -13,7 +14,7 @@ public class CoreGUI {
     private JPanel bodyLeftContainer;
     private JPanel bodyRightContainer;
     private JPanel gridPanelContainer;
-    private JLabel scoreLabel;
+    public static JLabel scoreLabel;
     private JPanel heart;
     private ArrayList<Mole> arrMole = new ArrayList<>();
     int multiHole = 0;
@@ -95,7 +96,9 @@ public class CoreGUI {
         headPanel.add(headRightContainer, BorderLayout.EAST);
 
     }
-
+    public void setscor(){
+        scoreLabel.setText("Score: " + scor);
+    }
     private void drawLeftHeadContainer() {
         scoreLabel = new JLabel("Score: ");
         heart = new JPanel();
