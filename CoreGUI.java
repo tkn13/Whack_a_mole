@@ -17,10 +17,12 @@ public class CoreGUI {
     public static JLabel scoreLabel;
     private JPanel heart;
     private ArrayList<Mole> arrMole = new ArrayList<>();
+    private ArrayList<Heart> arrHearts = new ArrayList<>();
     int multiHole = 0;
     int probMultiHole;
     boolean stopBtnBoolean = true;
     public static int scor = 0;
+    public static int heartcount = 0;
 
     public void initialize() {
         f = new JFrame("Whack a Mole!");
@@ -104,7 +106,10 @@ public class CoreGUI {
         heart = new JPanel();
         heart.setLayout(new GridLayout(1, 3));
         for (int i = 0; i < 3; i++) {
-            heart.add(new JLabel("<3"));
+            Heart hard = new Heart();
+            hard.setid(i);
+            arrHearts.add(hard);
+            heart.add(hard);
         }
         headLeftContainer.add(scoreLabel);
         headLeftContainer.add(heart);
@@ -146,6 +151,9 @@ public class CoreGUI {
 
     public ArrayList<Mole> getMoles() {
         return arrMole;
+    }
+    public ArrayList<Heart> getHearts() {
+        return arrHearts;
     }
 
     // private void movemole(){
@@ -231,6 +239,13 @@ public class CoreGUI {
 
         for (int m = 0; m < multiHole; m++) {
             arrMole.get(arrpos[m]).hideing();
+            heartcount += 1;
+            if(heartcount <= 3){
+                arrHearts.get(heartcount-1).setNohard();
+            }
+            else{
+                System.out.println("END");
+            }
             ;
         }
     }

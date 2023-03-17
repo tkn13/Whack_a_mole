@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class Heart extends JLabel {
     public Icon heart;
+    public int id;
     Heart(){
         try{
 			heart = new ImageIcon("images/heart.png");
@@ -15,5 +16,11 @@ public class Heart extends JLabel {
         this.setIcon(heart);
         this.setBackground(new Color(135,206,235));
     }
-    
+    public void setid(int i){
+        this.id = i;
+    }
+
+    public void setNohard(){
+        this.setIcon(null);
+    }
 }
