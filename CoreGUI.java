@@ -2,6 +2,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import java.awt.event.*;
+
 
 public class CoreGUI {
     private JFrame f;
@@ -34,7 +36,17 @@ public class CoreGUI {
         detailComponents();
         f.setVisible(true);
         f.setResizable(false);
-        // devMode();
+        f.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_SPACE) {
+                    
+                }
+            }
+        });
+
+        // Set the panel as focusable so it can receive keyboard events
+        f.setFocusable(true);
     }
 
     private void detailComponents() {
@@ -68,11 +80,10 @@ public class CoreGUI {
     }
     
     private void drawTextLable(){
-        TextLable = new JLabel("           Game Over");
+        TextLable = new JLabel(" Press Spacebar to start");
         TextLable.setPreferredSize(new Dimension(500, 140));
         TextLable.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 60));
         TextLable.setForeground(Color.RED);
-        TextLable.setVisible(false);
     }
 
     private void drawLeftHeadContainer() {
@@ -91,7 +102,7 @@ public class CoreGUI {
         headLeftContainer.add(scoreLabel);
         headLeftContainer.add(heartContainer);
         headLeftContainer.setLayout(new GridLayout(2, 1));
-        headLeftContainer.setOpaque(false);
+        //headLeftContainer.setOpaque(false);
     }
 
     private void drawBodyPanel() {
@@ -133,8 +144,9 @@ public class CoreGUI {
     }
 
     private void gameRestart(){
-
+        
     }
+
     public void playingDelayVersion() {
         // generate probabilities how many mole will show
         int[] arrPos = new int[3];
