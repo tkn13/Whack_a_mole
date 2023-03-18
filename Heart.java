@@ -2,25 +2,30 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Heart extends JLabel {
-    public Icon heart;
-    public int id;
+    private Icon heart;
+    private Icon blackHeart;
+    private int id;
     Heart(){
         try{
 			heart = new ImageIcon("images/heart.png");
+			blackHeart = new ImageIcon("images/blackHeart.png");
 			
 		}
 		catch(Exception e){
 			System.out.println(e);
 		}
-        this.setPreferredSize(new Dimension(30,30));
-        this.setIcon(heart);
-        this.setBackground(new Color(135,206,235));
+        setPreferredSize(new Dimension(30,30));
+        setIcon(heart);
+        setOpaque(false);
     }
-    public void setid(int i){
-        this.id = i;
+    public void setHeartId(int i){
+        id = i;
+    }
+    public int getHeartId(){
+        return id;
     }
 
-    public void setNohard(){
-        this.setIcon(null);
+    public void deleteHeart(){
+        setIcon(blackHeart);
     }
 }

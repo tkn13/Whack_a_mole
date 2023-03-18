@@ -6,54 +6,61 @@ import java.awt.event.ActionEvent;
 
 public class Mole extends JButton {
     private Icon hole;
-    private Icon mole;
-    private Icon type1;
-    private Icon type2;
-    private Icon type3;
-    private Icon type1_2;
-    private Icon type2_2;
-    private Icon type3_2;
-    private Icon prepareToShow;
-    private Icon prepareToHide;
+    private Icon preType1;
+    private Icon preType2;
+    private Icon preType3;
+    private Icon showType1;
+    private Icon showType2;
+    private Icon showType3;
+    private Icon preBomb;
+    private Icon showBomb;
+    private Icon hitType1;
+    private Icon hitType2;
+    private Icon hitType3;
+    private Icon bomb;
     private String state = "hide"; // hide,perpareToShow,showing,perpareToHide
-    private int TypeOfMole; // It can be Type 1,2,3 each type have different score
+    private int TypeOfMole; // It can be Type 1,2,3 each TypeOfMole have different score
     private int id;
     AllButtonListener bl = new AllButtonListener();
-    public static int type = 0;
 
     public Mole() {
-     
+
         try {
-            hole = new ImageIcon("image/hole.png");
-            mole = new ImageIcon("image/showing.png");
-            type1 = new ImageIcon("drill.jpg");
-            type2 = new ImageIcon("star.png");
-            type3 = new ImageIcon("bocci.jpg");
-            type1_2 = new ImageIcon("lose.png");
-            type2_2 = new ImageIcon("loseja.png");
-            type3_2 = new ImageIcon("darkroot.ppg");
-            prepareToShow = new ImageIcon("image/prepareToShow.png");
-            prepareToHide = new ImageIcon("image/prepareToHide.png");
+            hole = new ImageIcon("images/hole.png");
+            preType1 = new ImageIcon("images/preShowType1.png");
+            preType2 = new ImageIcon("images/preShowType2.png");
+            preType3 = new ImageIcon("images/preShowType3.png");
+            showType1 = new ImageIcon("images/showType1.png");
+            showType2 = new ImageIcon("images/showType2.png");
+            showType3 = new ImageIcon("images/showType3.png");
+            hitType1 = new ImageIcon("images/hitType1.png");
+            hitType2 = new ImageIcon("images/hitType2.png");
+            hitType3 = new ImageIcon("images/hitType3.png");
+            preBomb = new ImageIcon("images/preBomb.png");
+            showBomb = new ImageIcon("images/showBomb.png");
+            bomb = new ImageIcon("images/bomb.png");
+
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        this.setPreferredSize(new Dimension(150, 150));
-        this.setIcon(hole);
-        this.addActionListener(bl);
+        setPreferredSize(new Dimension(150, 150));
+        setIcon(hole);
+        setBorder(null);
+        addActionListener(bl);
     }
 
     public void prepareToShowing() {
-        type = (int) (Math.random() * 3);
-        if (type == 0){
-            setIcon(type1);
+        TypeOfMole = (int) (Math.random() * 4);
+        if (TypeOfMole == 0) {
+            setIcon(preType1);
+        } else if (TypeOfMole == 1) {
+            setIcon(preType2);
+        } else if (TypeOfMole == 2) {
+            setIcon(preType3);
+        } else if (TypeOfMole == 3){
+            setIcon(preBomb);
         }
-        else if(type == 1){
-            setIcon(type2);
-        }
-        else if(type == 2){
-            setIcon(type3);
-        }   
         state = "prepareToShow";
         // setIcon(prepareToShow);
     }
@@ -65,21 +72,33 @@ public class Mole extends JButton {
 
     public void showing() {
         state = "showing";
-        if (type == 0){
-            setIcon(type1_2);
+        if (TypeOfMole == 0) {
+            setIcon(showType1);
+        } else if (TypeOfMole == 1) {
+            setIcon(showType2);
+        } else if (TypeOfMole == 2) {
+            setIcon(showType3);
+        } else if (TypeOfMole == 3){
+            setIcon(showBomb);
         }
-        else if(type == 1){
-            setIcon(type2_2);
-        }
-        else if(type == 2){
-            setIcon(type3_2);
-        }  
         // setIcon(mole);
     }
 
     public void prepareToHide() {
         state = "prepareToHide";
-        setIcon(prepareToHide);
+        if (TypeOfMole == 0) {
+            setIcon(preType1);
+        } else if (TypeOfMole == 1) {
+            setIcon(preType2);
+        } else if (TypeOfMole == 2) {
+            setIcon(preType3);
+        } else if (TypeOfMole == 3){
+            setIcon(preBomb);
+        }
+    }
+
+    public void bombb(){
+        state = "bomb";
     }
 
     public String getState() {
@@ -93,30 +112,36 @@ public class Mole extends JButton {
     public int getId() {
         return id;
     }
+    public int getTypeOfMole(){
+        return TypeOfMole;
+    }
 
     private class AllButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent ev) {
             // JButton source = (JButton)ev.getSource();
             if (state.equals("showing")) {
-                if(type == 0){
-                    CoreGUI.scor++;
-                    System.out.println("type1");
-                }
-                else if (type == 1){
-                    CoreGUI.scor += 2;
-                    System.out.println("type2");
-                }
-                else if (type == 2){
-                    CoreGUI.scor += 3;
-                    System.out.println("type3");
-                }
                 state = "hide";
+                if (TypeOfMole == 0) {
+                    CoreGUI.setscore(100);
+                    System.out.println("preType1");
+                    setIcon(hitType1);
+                } else if (TypeOfMole == 1) {
+                    CoreGUI.setscore(250);
+                    System.out.println("preType2");
+                    setIcon(hitType2);
+                } else if (TypeOfMole == 2) {
+                    CoreGUI.setscore(400);
+                    System.out.println("preType3");
+                    setIcon(hitType3);
+                } else if (TypeOfMole == 3){
+                    setIcon(bomb);
+                    bombb();
+                    System.out.println(state);
+                }
                 System.out.printf("" + "HIT\n");
-                // CoreGUI.scor++;
-                System.out.printf("" + "%d\n" , CoreGUI.scor);
-                setIcon(hole);
-                CoreGUI.scoreLabel.setText("Score: " + CoreGUI.scor);
+                // CoreGUI.score++;
+                System.out.printf("" + "%d\n", CoreGUI.score);
             }
         }
     }

@@ -5,28 +5,31 @@ import javax.swing.*;
 
 public class CoreGUI {
     private JFrame f;
-    private JPanel headPanel;
+    private JLabel headPanel;
     private JPanel bodyPanel;
-    private JPanel footPanel;
-    public JPanel gridPanel;
-    private JPanel headLeftContainer;
-    private JPanel headRightContainer;
-    private JPanel bodyLeftContainer;
-    private JPanel bodyRightContainer;
+    private JLabel TextLable;
+    private JPanel gridPanel;
+    private JLabel headLeftContainer;
+    private JLabel bodyLeftContainer;
+    private JLabel bodyRightContainer;
     private JPanel gridPanelContainer;
-    public static JLabel scoreLabel;
-    private JPanel heart;
+    private JLabel heartContainer;
+    public boolean stopBtnBoolean = true;
+
     private ArrayList<Mole> arrMole = new ArrayList<>();
     private ArrayList<Heart> arrHearts = new ArrayList<>();
-    int multiHole = 0;
-    int probMultiHole;
-    boolean stopBtnBoolean = true;
-    public static int scor = 0;
+
+    private int multiHole = 0;
+    private int probMultiHole;
+    
+    private static JLabel scoreLabel;
+    public static int score = 0;
     public static int heartcount = 0;
+    
 
     public void initialize() {
         f = new JFrame("Whack a Mole!");
-        f.setSize(1280, 720);
+        f.setSize(1280, 780);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         detailComponents();
         f.setVisible(true);
@@ -34,99 +37,71 @@ public class CoreGUI {
         // devMode();
     }
 
-    private void devMode() {
-        headPanel.setBackground(new Color(135, 206, 235));
-        headLeftContainer.setBackground(new Color(135, 206, 235));
-        headRightContainer.setBackground(new Color(135, 206, 235));
-        bodyLeftContainer.setBackground(new Color(155, 118, 83));
-        bodyRightContainer.setBackground(new Color(155, 118, 83));
-        bodyPanel.setBackground(new Color(116, 62, 12));
-        gridPanelContainer.setBackground(new Color(85, 47, 18));
-        gridPanel.setBackground(new Color(70, 46, 26));
-        footPanel.setBackground(new Color(70, 37, 10));
-    }
-
     private void detailComponents() {
         drawHeadPanel();
         drawBodyPanel();
-        drawFootPanel();
 
-        bodyLeftContainer = new JPanel();
-        bodyRightContainer = new JPanel();
-        bodyLeftContainer.setPreferredSize(new Dimension(200, 720));
-        bodyRightContainer.setPreferredSize(new Dimension(200, 720));
+        bodyLeftContainer = new JLabel(new ImageIcon("images/leftBG.png"));
+        bodyRightContainer = new JLabel(new ImageIcon("images/rightBG.png"));
+        bodyLeftContainer.setPreferredSize(new Dimension(370, 720));
+        bodyRightContainer.setPreferredSize(new Dimension(370, 720));
 
         f.setLayout(new BorderLayout());
         f.add(headPanel, BorderLayout.PAGE_START);
         f.add(bodyLeftContainer, BorderLayout.LINE_START);
         f.add(bodyRightContainer, BorderLayout.LINE_END);
         f.add(bodyPanel, BorderLayout.CENTER);
-        f.add(footPanel, BorderLayout.PAGE_END);
-        devMode();
-
-        // timer.schedule(new TimerTask() {
-        // @Override
-        // public void run() {
-        // for (Component c : gridPanel.getComponents()) {
-        // if (c instanceof Mole){
-        // Mole dp = (Mole) c;
-        // if (dp.clickme){
-        // dp.tohole();
-        // System.out.printf(""+"HIDE\n");
-        // dp.clickme = false;
-        // }
-        // }
-        // }
-        // movemole();
-        // }
-        // }, 0, 1500);
     }
 
     private void drawHeadPanel() {
-        headPanel = new JPanel();
-        headLeftContainer = new JPanel();
-        headRightContainer = new JPanel();
+        headPanel = new JLabel(new ImageIcon("images/sky.png"));
+        headLeftContainer = new JLabel();
         drawLeftHeadContainer();
-        drawRightHeadContainer();
+        drawTextLable();
 
-        headPanel.setPreferredSize(new Dimension(1280, 100));
+        headPanel.setPreferredSize(new Dimension(1280, 150));
         headLeftContainer.setPreferredSize(new Dimension(300, 140));
-        headRightContainer.setPreferredSize(new Dimension(300, 140));
 
         headPanel.setLayout(new BorderLayout());
         headPanel.add(headLeftContainer, BorderLayout.WEST);
-        headPanel.add(headRightContainer, BorderLayout.EAST);
+        headPanel.add(TextLable, BorderLayout.CENTER);
+    }
+    
+    private void drawTextLable(){
+        TextLable = new JLabel("           Game Over");
+        TextLable.setPreferredSize(new Dimension(500, 140));
+        TextLable.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 60));
+        TextLable.setForeground(Color.RED);
+        TextLable.setVisible(false);
+    }
 
-    }
-    public void setscor(){
-        scoreLabel.setText("Score: " + scor);
-    }
     private void drawLeftHeadContainer() {
         scoreLabel = new JLabel("Score: ");
-        heart = new JPanel();
-        heart.setLayout(new GridLayout(1, 3));
-        for (int i = 0; i < 3; i++) {
-            Heart hard = new Heart();
-            hard.setid(i);
-            arrHearts.add(hard);
-            heart.add(hard);
-        }
-        headLeftContainer.add(scoreLabel);
-        headLeftContainer.add(heart);
-        headLeftContainer.setLayout(new GridLayout(2, 1));
-    }
+        scoreLabel.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 30));
 
-    private void drawRightHeadContainer() {
-        StopBtn stopbtn = new StopBtn();
-        headRightContainer.setLayout(new BorderLayout());
-        headRightContainer.add(stopbtn, BorderLayout.LINE_END);
+        heartContainer = new JLabel();
+        heartContainer.setLayout(new GridLayout(1, 3));
+        for (int i = 0; i < 3; i++) {
+            Heart heart = new Heart();
+            heart.setHeartId(i);
+            arrHearts.add(heart);
+            heartContainer.add(heart);
+        }
+
+        headLeftContainer.add(scoreLabel);
+        headLeftContainer.add(heartContainer);
+        headLeftContainer.setLayout(new GridLayout(2, 1));
+        headLeftContainer.setOpaque(false);
     }
 
     private void drawBodyPanel() {
         bodyPanel = new JPanel();
         drawGrid();
-        bodyPanel.setPreferredSize(new Dimension(700, 570));
+        bodyPanel.setPreferredSize(new Dimension(100, 570));
         bodyPanel.add(gridPanelContainer);
+        bodyPanel.setBackground(new Color(118, 83, 64));
+        gridPanelContainer.setBackground(new Color(118, 83, 64));
+        gridPanel.setBackground(new Color(118, 83, 64));
     }
 
     private void drawGrid() {
@@ -144,45 +119,28 @@ public class CoreGUI {
 
     }
 
-    private void drawFootPanel() {
-        footPanel = new JPanel();
-        footPanel.setPreferredSize(new Dimension(1280, 50));
+    private void drawGameOver(){
+        stopBtnBoolean = false;
+        TextLable.setVisible(true);
+        int result = JOptionPane.showConfirmDialog(null, "Game Over Wanna try again?");
+        if (result == JOptionPane.YES_OPTION) {
+            gameRestart();
+        }
+        else if (result == JOptionPane.NO_OPTION){
+            System.exit(0);
+        }
+        
     }
 
-    public ArrayList<Mole> getMoles() {
-        return arrMole;
-    }
-    public ArrayList<Heart> getHearts() {
-        return arrHearts;
-    }
+    private void gameRestart(){
 
-    // private void movemole(){
-    // Random random = new Random();
-    // Integer x = random.nextInt(9);
-    // // for(int i = 0; i<9; i++){
-
-    // // }
-    // for (Component c : gridPanel.getComponents()) {
-    // if (c instanceof Mole){
-    // Mole dp = (Mole) c;
-    // int h = dp.getID();
-    // if (h == x){
-    // dp.toel();
-    // dp.clickme = true;
-    // System.out.printf(""+"SHOW\n");
-    // }
-    // else {
-    // dp.tohole();
-    // }
-    // }
-    // }
-    // }
+    }
     public void playingDelayVersion() {
         // generate probabilities how many mole will show
-        int[] arrpos = new int[3];
+        int[] arrPos = new int[3];
         probMultiHole = (int) (Math.random() * 10);
-        for (int i = 0; i < arrpos.length; i++) {
-            arrpos[i] = -1;
+        for (int i = 0; i < arrPos.length; i++) {
+            arrPos[i] = -1;
         }
         switch (probMultiHole) {
             case 1:
@@ -210,46 +168,57 @@ public class CoreGUI {
         for (int j = 0; j < multiHole; j++) {
             int temppos = -1;
             temppos = (int) Math.round((Math.random() * 7) + 1);
-            if (isInArr(arrpos, temppos)) {
+            if (isInArr(arrPos, temppos)) {
                 j--;
                 continue;
             } else {
-                arrpos[j] = temppos;
+                arrPos[j] = temppos;
             }
         }
-         System.out.println(Arrays.toString(arrpos));
+        System.out.println(Arrays.toString(arrPos));
 
         // Cycle of showing mole
         for (int m = 0; m < multiHole; m++) {
-            arrMole.get(arrpos[m]).prepareToShowing();
+            delay(50);
+            arrMole.get(arrPos[m]).prepareToShowing();
         }
-        delay(500);
+        delay(300);
 
         for (int m = 0; m < multiHole; m++) {
-            arrMole.get(arrpos[m]).showing();
+            delay(50);
+            arrMole.get(arrPos[m]).showing();
         }
-        delay(1000);
+        delay(650);
 
         for (int m = 0; m < multiHole; m++) {
-            if ((arrMole.get(arrpos[m]).getState()).equals("showing")) {
-                arrMole.get(arrpos[m]).prepareToHide();
+            if ((arrMole.get(arrPos[m]).getState()).equals("showing")) {
+                delay(50);
+                arrMole.get(arrPos[m]).prepareToHide();
             }
         }
-        delay(500);
+        delay(300);
 
         for (int m = 0; m < multiHole; m++) {
-            arrMole.get(arrpos[m]).hideing();
-            heartcount += 1;
-            if(heartcount <= 3){
-                arrHearts.get(heartcount-1).setNohard();
+            boolean notBomb = arrMole.get(arrPos[m]).getTypeOfMole() != 3;
+            boolean hideingMole = arrMole.get(arrPos[m]).getState().equals("prepareToHide");
+            boolean bomb = arrMole.get(arrPos[m]).getState().equals("bomb");
+            if ((notBomb && hideingMole) || bomb) {
+                arrMole.get(arrPos[m]).hideing();
+                damage();
             }
-            else{
-                System.out.println("END");
-            }
-            ;
+            arrMole.get(arrPos[m]).hideing();
         }
     }
-
+    private void damage(){
+        heartcount += 1;
+        if (heartcount < 3) {
+            arrHearts.get(heartcount - 1).deleteHeart();
+        } else {
+            arrHearts.get(heartcount - 1).deleteHeart();
+            System.out.println("END");
+            drawGameOver();
+        }
+    }
     public static void delay(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -258,7 +227,12 @@ public class CoreGUI {
         }
     }
 
-    private boolean isInArr(int[] arr, int pos) {
+    public static void setscore(int s) {
+        score += s;
+        scoreLabel.setText("Score: " + score);
+    }
+
+    private static boolean isInArr(int[] arr, int pos) {
         for (int i = 0; i < 3; i++) {
             if (pos == arr[i]) {
                 return true;
