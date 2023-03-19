@@ -28,6 +28,7 @@ public class CoreGUI {
     private JLabel heartContainer;
     private boolean gameRunable = true;
     private GameOptions go;
+    private String pathSeparator = System.getProperty("file.separator");
 
     private ArrayList<Mole> arrMole = new ArrayList<>();
     private ArrayList<Heart> arrHearts = new ArrayList<>();
@@ -53,8 +54,8 @@ public class CoreGUI {
         drawBodyPanel();
         setCursor();
 
-        bodyLeftContainer = new JLabel(new ImageIcon("images/leftBG.png"));
-        bodyRightContainer = new JLabel(new ImageIcon("images/rightBG.png"));
+        bodyLeftContainer = new JLabel(new ImageIcon("images" + pathSeparator + "leftBG.png"));
+        bodyRightContainer = new JLabel(new ImageIcon("images" + pathSeparator + "rightBG.png"));
         bodyLeftContainer.setPreferredSize(new Dimension(370, 720));
         bodyRightContainer.setPreferredSize(new Dimension(370, 720));
 
@@ -68,13 +69,13 @@ public class CoreGUI {
 
     private void setCursor(){
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image hammerImage = toolkit.getImage("images/hammer.png");
+        Image hammerImage = toolkit.getImage("images" + pathSeparator + "hammer.png");
         Cursor c = toolkit.createCustomCursor(hammerImage, new Point(f.getX(), f.getY()), "hammer");
         f.setCursor(c);
     }
 
     private void drawheadLabel() {
-        headLabel = new JLabel(new ImageIcon("images/sky.png"));
+        headLabel = new JLabel(new ImageIcon("images" + pathSeparator + "sky.png"));
         headLeftContainer = new JLabel();
 
         drawLeftHeadContainer();

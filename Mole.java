@@ -21,24 +21,25 @@ public class Mole extends JButton {
     private String state = "hide"; // hide,perpareToShow,showing,perpareToHide
     private int TypeOfMole; // It can be Type 1,2,3 each TypeOfMole have different score
     private int id;
+    private String pathSeparator = System.getProperty("file.separator");
     AllButtonListener bl = new AllButtonListener();
 
     public Mole() {
 
         try {
-            hole = new ImageIcon("images/hole.png");
-            preType1 = new ImageIcon("images/preShowType1.png");
-            preType2 = new ImageIcon("images/preShowType2.png");
-            preType3 = new ImageIcon("images/preShowType3.png");
-            showType1 = new ImageIcon("images/showType1.png");
-            showType2 = new ImageIcon("images/showType2.png");
-            showType3 = new ImageIcon("images/showType3.png");
-            hitType1 = new ImageIcon("images/hitType1.png");
-            hitType2 = new ImageIcon("images/hitType2.png");
-            hitType3 = new ImageIcon("images/hitType3.png");
-            preBomb = new ImageIcon("images/preBomb.png");
-            showBomb = new ImageIcon("images/showBomb.png");
-            bomb = new ImageIcon("images/bomb.png");
+            hole = new ImageIcon("images" + pathSeparator + "hole.png");
+            preType1 = new ImageIcon("images" + pathSeparator + "preShowType1.png");
+            preType2 = new ImageIcon("images" + pathSeparator + "preShowType2.png");
+            preType3 = new ImageIcon("images" + pathSeparator + "preShowType3.png");
+            showType1 = new ImageIcon("images" + pathSeparator + "showType1.png");
+            showType2 = new ImageIcon("images" + pathSeparator + "showType2.png");
+            showType3 = new ImageIcon("images" + pathSeparator + "showType3.png");
+            hitType1 = new ImageIcon("images" + pathSeparator + "hitType1.png");
+            hitType2 = new ImageIcon("images" + pathSeparator + "hitType2.png");
+            hitType3 = new ImageIcon("images" + pathSeparator + "hitType3.png");
+            preBomb = new ImageIcon("images" + pathSeparator + "preBomb.png");
+            showBomb = new ImageIcon("images" + pathSeparator + "showBomb.png");
+            bomb = new ImageIcon("images" + pathSeparator + "bomb.png");
 
         } catch (Exception e) {
             System.out.println(e);
