@@ -115,6 +115,7 @@ public class Mole extends JButton {
     public int getTypeOfMole(){
         return TypeOfMole;
     }
+   
 
     private class AllButtonListener implements ActionListener {
         @Override

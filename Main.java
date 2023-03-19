@@ -3,7 +3,7 @@ public class Main {
         CoreGUI a = new CoreGUI();
         a.initialize();
         while(true){
-            while (a.stopBtnBoolean) {
+            while (a.getGameRunable()) {
                 a.playingDelayVersion();
             }
         }

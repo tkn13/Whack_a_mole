@@ -28,4 +28,7 @@ public class Heart extends JLabel {
     public void deleteHeart(){
         setIcon(blackHeart);
     }
+    public void plusHeart(){
+        setIcon(heart);
+    }
 }

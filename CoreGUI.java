@@ -1,13 +1,23 @@
-import java.awt.*;
-import java.util.*;
 import java.util.ArrayList;
-import javax.swing.*;
-import java.awt.event.*;
-
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.lang.StackWalker.Option;
+import java.awt.Cursor;
 
 public class CoreGUI {
     private JFrame f;
-    private JLabel headPanel;
+    private JLabel headLabel;
     private JPanel bodyPanel;
     private JLabel TextLable;
     private JPanel gridPanel;
@@ -16,42 +26,32 @@ public class CoreGUI {
     private JLabel bodyRightContainer;
     private JPanel gridPanelContainer;
     private JLabel heartContainer;
-    public boolean stopBtnBoolean = true;
+    private boolean gameRunable = true;
+    private GameOptions go;
 
     private ArrayList<Mole> arrMole = new ArrayList<>();
     private ArrayList<Heart> arrHearts = new ArrayList<>();
 
     private int multiHole = 0;
-    private int probMultiHole;
-    
+    private int probMultiHole =0;
+    private int heartCount = 0;
+
     private static JLabel scoreLabel;
     public static int score = 0;
-    public static int heartcount = 0;
     
-
     public void initialize() {
         f = new JFrame("Whack a Mole!");
         f.setSize(1280, 780);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setResizable(false);
         detailComponents();
         f.setVisible(true);
-        f.setResizable(false);
-        f.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.VK_SPACE) {
-                    
-                }
-            }
-        });
-
-        // Set the panel as focusable so it can receive keyboard events
-        f.setFocusable(true);
     }
 
     private void detailComponents() {
-        drawHeadPanel();
+        drawheadLabel();
         drawBodyPanel();
+        setCursor();
 
         bodyLeftContainer = new JLabel(new ImageIcon("images/leftBG.png"));
         bodyRightContainer = new JLabel(new ImageIcon("images/rightBG.png"));
@@ -59,37 +59,47 @@ public class CoreGUI {
         bodyRightContainer.setPreferredSize(new Dimension(370, 720));
 
         f.setLayout(new BorderLayout());
-        f.add(headPanel, BorderLayout.PAGE_START);
+        f.add(headLabel, BorderLayout.PAGE_START);
         f.add(bodyLeftContainer, BorderLayout.LINE_START);
         f.add(bodyRightContainer, BorderLayout.LINE_END);
         f.add(bodyPanel, BorderLayout.CENTER);
+        f.setFocusable(true);      
     }
 
-    private void drawHeadPanel() {
-        headPanel = new JLabel(new ImageIcon("images/sky.png"));
+    private void setCursor(){
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image hammerImage = toolkit.getImage("images/hammer.png");
+        Cursor c = toolkit.createCustomCursor(hammerImage, new Point(f.getX(), f.getY()), "hammer");
+        f.setCursor(c);
+    }
+
+    private void drawheadLabel() {
+        headLabel = new JLabel(new ImageIcon("images/sky.png"));
         headLeftContainer = new JLabel();
+
         drawLeftHeadContainer();
         drawTextLable();
 
-        headPanel.setPreferredSize(new Dimension(1280, 150));
+        headLabel.setPreferredSize(new Dimension(1280, 150));
         headLeftContainer.setPreferredSize(new Dimension(300, 140));
 
-        headPanel.setLayout(new BorderLayout());
-        headPanel.add(headLeftContainer, BorderLayout.WEST);
-        headPanel.add(TextLable, BorderLayout.CENTER);
+        headLabel.setLayout(new BorderLayout());
+        headLabel.add(headLeftContainer, BorderLayout.WEST);
+        headLabel.add(TextLable, BorderLayout.CENTER);
     }
-    
-    private void drawTextLable(){
-        TextLable = new JLabel(" Press Spacebar to start");
+
+    private void drawTextLable() {
+        TextLable = new JLabel("           GAME OVER");
         TextLable.setPreferredSize(new Dimension(500, 140));
         TextLable.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 60));
         TextLable.setForeground(Color.RED);
+        TextLable.setVisible(false);
     }
 
     private void drawLeftHeadContainer() {
-        scoreLabel = new JLabel("Score: ");
+        scoreLabel = new JLabel("Score: 0");
         scoreLabel.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 30));
-
+        
         heartContainer = new JLabel();
         heartContainer.setLayout(new GridLayout(1, 3));
         for (int i = 0; i < 3; i++) {
@@ -98,18 +108,18 @@ public class CoreGUI {
             arrHearts.add(heart);
             heartContainer.add(heart);
         }
-
+        
         headLeftContainer.add(scoreLabel);
         headLeftContainer.add(heartContainer);
         headLeftContainer.setLayout(new GridLayout(2, 1));
-        //headLeftContainer.setOpaque(false);
     }
 
     private void drawBodyPanel() {
         bodyPanel = new JPanel();
-        drawGrid();
         bodyPanel.setPreferredSize(new Dimension(100, 570));
+        drawGrid();
         bodyPanel.add(gridPanelContainer);
+
         bodyPanel.setBackground(new Color(118, 83, 64));
         gridPanelContainer.setBackground(new Color(118, 83, 64));
         gridPanel.setBackground(new Color(118, 83, 64));
@@ -127,24 +137,32 @@ public class CoreGUI {
         gridPanel.setLayout(new GridLayout(3, 3, 50, 30));
         gridPanelContainer.add(gridPanel);
         gridPanelContainer.setPreferredSize(new Dimension(700, 570));
-
     }
 
-    private void drawGameOver(){
-        stopBtnBoolean = false;
+    private void drawGameOver() {
+        gameRunable = false;
         TextLable.setVisible(true);
-        int result = JOptionPane.showConfirmDialog(null, "Game Over Wanna try again?");
-        if (result == JOptionPane.YES_OPTION) {
-            gameRestart();
-        }
-        else if (result == JOptionPane.NO_OPTION){
-            System.exit(0);
-        }
-        
+        go = new GameOptions();
+        String[] option = {"Yes", "No"};
+        int result;
+        // if(result == 0){
+        //     gameRestart();
+        // }
+        // else{
+        //     System.exit(0);
+        // }
+
     }
 
-    private void gameRestart(){
-        
+    private void gameRestart() {
+        gameRunable = true;
+        score = 0;
+        TextLable.setVisible(false);
+        setscore(0);
+        for (Heart h : arrHearts) {
+            h.plusHeart();
+        }
+        heartCount = 0;
     }
 
     public void playingDelayVersion() {
@@ -162,16 +180,13 @@ public class CoreGUI {
             case 5:
             case 6:
             case 7:
-                // System.out.println("1 hole: " + probMultiHole);
                 multiHole = 1;
                 break;
             case 8:
             case 9:
-                // System.out.println("2 hole: " + probMultiHole);
                 multiHole = 2;
                 break;
             case 0:
-                // System.out.println("3 hole: " + probMultiHole);
                 multiHole = 3;
                 break;
         }// End of generate probabilities how many mole will show
@@ -187,8 +202,6 @@ public class CoreGUI {
                 arrPos[j] = temppos;
             }
         }
-        System.out.println(Arrays.toString(arrPos));
-
         // Cycle of showing mole
         for (int m = 0; m < multiHole; m++) {
             delay(50);
@@ -221,16 +234,22 @@ public class CoreGUI {
             arrMole.get(arrPos[m]).hideing();
         }
     }
-    private void damage(){
-        heartcount += 1;
-        if (heartcount < 3) {
-            arrHearts.get(heartcount - 1).deleteHeart();
+
+    private void damage() {
+        heartCount += 1;
+        if (heartCount < 3) {
+            arrHearts.get(heartCount - 1).deleteHeart();
         } else {
-            arrHearts.get(heartcount - 1).deleteHeart();
+            arrHearts.get(heartCount - 1).deleteHeart();
             System.out.println("END");
             drawGameOver();
         }
     }
+
+    public boolean getGameRunable(){
+        return gameRunable;
+    }
+
     public static void delay(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
