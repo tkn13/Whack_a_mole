@@ -3,6 +3,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -12,10 +14,13 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.StackWalker.Option;
 import java.awt.Cursor;
 
-public class CoreGUI {
+public class CoreGUI extends JFrame{
     private JFrame f;
     private JLabel headLabel;
     private JPanel bodyPanel;
@@ -139,20 +144,40 @@ public class CoreGUI {
         gridPanelContainer.add(gridPanel);
         gridPanelContainer.setPreferredSize(new Dimension(700, 570));
     }
+    public CoreGUI(int a) {
 
+        getContentPane().setBackground(new Color(238, 232, 170));
+        getContentPane().setLayout(null);
+        setTitle("whack a mole");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
+        setSize(450, 300);
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(dim.width / 2 - this.getWidth() / 2, dim.height / 2 - this.getHeight() / 2);
+
+    }
+    public CoreGUI() {
+
+    }
     private void drawGameOver() {
+        CoreGUI cdframe = new CoreGUI(1);
         gameRunable = false;
         TextLable.setVisible(true);
         go = new GameOptions();
-        String[] option = {"Yes", "No"};
-        int result;
-        // if(result == 0){
-        //     gameRestart();
-        // }
-        // else{
-        //     System.exit(0);
-        // }
-
+        String[] options = {"Yes", "No"};
+        ImageIcon icon = new ImageIcon("images/end.png");
+        int result = JOptionPane.showOptionDialog(cdframe, "game over wanna try again",
+                "you lose", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, options, options[0]);
+        if(result == 0){
+            cdframe.setVisible(false);
+            gameRestart();
+        }
+        else{
+            System.exit(0);
+        }
+        System.out.println(result);
     }
 
     private void gameRestart() {
