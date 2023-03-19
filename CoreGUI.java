@@ -3,8 +3,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -14,10 +12,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.lang.StackWalker.Option;
 import java.awt.Cursor;
 
 public class CoreGUI extends JFrame{
@@ -32,7 +26,6 @@ public class CoreGUI extends JFrame{
     private JPanel gridPanelContainer;
     private JLabel heartContainer;
     private boolean gameRunable = true;
-    private GameOptions go;
     private String pathSeparator = System.getProperty("file.separator");
 
     private ArrayList<Mole> arrMole = new ArrayList<>();
@@ -144,34 +137,14 @@ public class CoreGUI extends JFrame{
         gridPanelContainer.add(gridPanel);
         gridPanelContainer.setPreferredSize(new Dimension(700, 570));
     }
-    public CoreGUI(int a) {
 
-        getContentPane().setBackground(new Color(238, 232, 170));
-        getContentPane().setLayout(null);
-        setTitle("whack a mole");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-        setResizable(false);
-        setSize(450, 300);
-
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width / 2 - this.getWidth() / 2, dim.height / 2 - this.getHeight() / 2);
-
-    }
-    public CoreGUI() {
-
-    }
     private void drawGameOver() {
-        CoreGUI cdframe = new CoreGUI(1);
         gameRunable = false;
         TextLable.setVisible(true);
-        go = new GameOptions();
         String[] options = {"Yes", "No"};
-        ImageIcon icon = new ImageIcon("images/end.png");
-        int result = JOptionPane.showOptionDialog(cdframe, "game over wanna try again",
-                "you lose", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, options, options[0]);
+        ImageIcon icon = new ImageIcon("images/gameOver.png");
+        int result = JOptionPane.showOptionDialog(null, "game over wanna try again?       ","you lose", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, options, options[0]);
         if(result == 0){
-            cdframe.setVisible(false);
             gameRestart();
         }
         else{
@@ -187,6 +160,9 @@ public class CoreGUI extends JFrame{
         setscore(0);
         for (Heart h : arrHearts) {
             h.plusHeart();
+        }
+        for(Mole m : arrMole){
+            m.hideing();
         }
         heartCount = 0;
     }
@@ -255,13 +231,15 @@ public class CoreGUI extends JFrame{
             boolean bomb = arrMole.get(arrPos[m]).getState().equals("bomb");
             if ((notBomb && hideingMole) || bomb) {
                 arrMole.get(arrPos[m]).hideing();
-                damage();
+                if(damage()){
+                    break;
+                }
             }
             arrMole.get(arrPos[m]).hideing();
         }
     }
 
-    private void damage() {
+    private boolean damage() {
         heartCount += 1;
         if (heartCount < 3) {
             arrHearts.get(heartCount - 1).deleteHeart();
@@ -269,7 +247,10 @@ public class CoreGUI extends JFrame{
             arrHearts.get(heartCount - 1).deleteHeart();
             System.out.println("END");
             drawGameOver();
+            return true;
+            
         }
+        return false;
     }
 
     public boolean getGameRunable(){
