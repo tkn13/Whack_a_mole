@@ -21,6 +21,7 @@ public class CoreGUI extends JFrame{
     private JLabel TextLable;
     private JPanel gridPanel;
     private JLabel headLeftContainer;
+    private JLabel headRightContainer;
     private JLabel bodyLeftContainer;
     private JLabel bodyRightContainer;
     private JPanel gridPanelContainer;
@@ -75,8 +76,10 @@ public class CoreGUI extends JFrame{
     private void drawheadLabel() {
         headLabel = new JLabel(new ImageIcon("images" + pathSeparator + "sky.png"));
         headLeftContainer = new JLabel();
+        headRightContainer = new JLabel();
 
         drawLeftHeadContainer();
+        drawRightHeadContainer();
         drawTextLable();
 
         headLabel.setPreferredSize(new Dimension(1280, 150));
@@ -85,6 +88,7 @@ public class CoreGUI extends JFrame{
         headLabel.setLayout(new BorderLayout());
         headLabel.add(headLeftContainer, BorderLayout.WEST);
         headLabel.add(TextLable, BorderLayout.CENTER);
+        headLabel.add(headRightContainer, BorderLayout.EAST);
     }
 
     private void drawTextLable() {
@@ -111,6 +115,10 @@ public class CoreGUI extends JFrame{
         headLeftContainer.add(scoreLabel);
         headLeftContainer.add(heartContainer);
         headLeftContainer.setLayout(new GridLayout(2, 1));
+    }
+
+    private void drawRightHeadContainer(){
+        headRightContainer.setText("Hight Score: ");
     }
 
     private void drawBodyPanel() {

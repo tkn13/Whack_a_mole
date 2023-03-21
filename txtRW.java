@@ -12,13 +12,13 @@ public class txtRW {
         System.out.println("read");
         try {
             FileReader reader = new FileReader("leaderboard.txt");
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            try (BufferedReader bufferedReader = new BufferedReader(reader)) {
+                String line;
  
-            String line;
- 
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-                return line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    System.out.println(line);
+                    return line;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
