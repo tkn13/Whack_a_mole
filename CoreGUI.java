@@ -139,6 +139,11 @@ public class CoreGUI extends JFrame{
     }
 
     private void drawGameOver() {
+        txtRW scor2 = new txtRW();
+        int olescor = Integer.valueOf(scor2.read());
+        if (score > olescor){
+            scor2.write(String.valueOf(score));
+        }
         gameRunable = false;
         TextLable.setVisible(true);
         String[] options = {"Yes", "No"};
