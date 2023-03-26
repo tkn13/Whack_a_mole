@@ -1,12 +1,12 @@
 public class Main {
     public static void main(String[] args) {
-        CoreGUI a = new CoreGUI();
-        // txtRW t = new txtRW();
-        // System.out.println(t.read());
+        GameCore a = new GameCore();
         a.initialize();
         while(true){
+            System.out.println("Stop");
             while (a.getGameRunable()) {
-                a.playingDelayVersion();
+                System.out.println("Play");
+                a.playing();
             }
         }
     }

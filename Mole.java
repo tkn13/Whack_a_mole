@@ -125,15 +125,15 @@ public class Mole extends JButton {
             if (state.equals("showing")) {
                 state = "hide";
                 if (TypeOfMole == 0) {
-                    CoreGUI.setscore(100);
+                    GameCore.setscore(100);
                     System.out.println("preType1");
                     setIcon(hitType1);
                 } else if (TypeOfMole == 1) {
-                    CoreGUI.setscore(250);
+                    GameCore.setscore(250);
                     System.out.println("preType2");
                     setIcon(hitType2);
                 } else if (TypeOfMole == 2) {
-                    CoreGUI.setscore(400);
+                    GameCore.setscore(400);
                     System.out.println("preType3");
                     setIcon(hitType3);
                 } else if (TypeOfMole == 3){
@@ -141,9 +141,6 @@ public class Mole extends JButton {
                     bombb();
                     System.out.println(state);
                 }
-                System.out.printf("" + "HIT\n");
-                // CoreGUI.score++;
-                System.out.printf("" + "%d\n", CoreGUI.score);
             }
         }
     }

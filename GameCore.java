@@ -12,13 +12,15 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.Cursor;
 
-public class CoreGUI extends JFrame{
+public class GameCore extends JFrame{
     private JFrame f;
     private JLabel headLabel;
     private JPanel bodyPanel;
-    private JLabel TextLable;
+    private JLabel TextLable = new JLabel();
     private JPanel gridPanel;
     private JLabel headLeftContainer;
     private JLabel headRightContainer;
@@ -26,8 +28,9 @@ public class CoreGUI extends JFrame{
     private JLabel bodyRightContainer;
     private JPanel gridPanelContainer;
     private JLabel heartContainer;
-    private boolean gameRunable = true;
+    private boolean gameRunable = false;
     private String pathSeparator = System.getProperty("file.separator");
+    private txtRW scoreRW = new txtRW();
 
     private ArrayList<Mole> arrMole = new ArrayList<>();
     private ArrayList<Heart> arrHearts = new ArrayList<>();
@@ -52,6 +55,7 @@ public class CoreGUI extends JFrame{
         drawheadLabel();
         drawBodyPanel();
         setCursor();
+        drawPressSpaceBar();
 
         bodyLeftContainer = new JLabel(new ImageIcon("images" + pathSeparator + "leftBG.png"));
         bodyRightContainer = new JLabel(new ImageIcon("images" + pathSeparator + "rightBG.png"));
@@ -63,6 +67,14 @@ public class CoreGUI extends JFrame{
         f.add(bodyLeftContainer, BorderLayout.LINE_START);
         f.add(bodyRightContainer, BorderLayout.LINE_END);
         f.add(bodyPanel, BorderLayout.CENTER);
+        //gameStart();
+        f.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    gameStart();
+                }
+            }
+        });
         f.setFocusable(true);      
     }
 
@@ -80,7 +92,7 @@ public class CoreGUI extends JFrame{
 
         drawLeftHeadContainer();
         drawRightHeadContainer();
-        drawTextLable();
+        drawGameOverLable();
 
         headLabel.setPreferredSize(new Dimension(1280, 150));
         headLeftContainer.setPreferredSize(new Dimension(300, 140));
@@ -91,17 +103,27 @@ public class CoreGUI extends JFrame{
         headLabel.add(headRightContainer, BorderLayout.EAST);
     }
 
-    private void drawTextLable() {
-        TextLable = new JLabel("           GAME OVER");
+    private void drawCenterLabel(String s){
+        TextLable.setText(s);
+    }
+
+    private void drawGameOverLable() {
+        drawCenterLabel("          GAME OVER");
         TextLable.setPreferredSize(new Dimension(500, 140));
-        TextLable.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 60));
-        TextLable.setForeground(Color.RED);
-        TextLable.setVisible(false);
+        TextLable.setFont(new Font("Zapfino", Font.BOLD, 60));
+        TextLable.setForeground(new Color(128,0,0));
+        TextLable.setVisible(true);
+    }
+
+    private void drawPressSpaceBar(){
+        drawCenterLabel("                        Press Spacebar to start");
+        TextLable.setFont(new Font("Zapfino", Font.BOLD, 50));
+        TextLable.setForeground(new Color(255, 204, 153));
     }
 
     private void drawLeftHeadContainer() {
-        scoreLabel = new JLabel("Score: 0");
-        scoreLabel.setFont(new Font("Hiragino Kaku Gothic Pro", Font.BOLD, 30));
+        scoreLabel = new JLabel("  Score: 0");
+        scoreLabel.setFont(new Font("Zapfino", Font.BOLD, 30));
         
         heartContainer = new JLabel();
         heartContainer.setLayout(new GridLayout(1, 3));
@@ -115,10 +137,13 @@ public class CoreGUI extends JFrame{
         headLeftContainer.add(scoreLabel);
         headLeftContainer.add(heartContainer);
         headLeftContainer.setLayout(new GridLayout(2, 1));
+        headLeftContainer.setVisible(false);
     }
 
     private void drawRightHeadContainer(){
-        headRightContainer.setText("Hight Score: ");
+        headRightContainer.setText("Hight Score: " + scoreRW.read() + "  ");
+        headRightContainer.setFont(new Font("Zapf Dingbats", Font.BOLD, 35)); 
+        headRightContainer.setForeground(new Color(128, 128, 128));
     }
 
     private void drawBodyPanel() {
@@ -147,13 +172,13 @@ public class CoreGUI extends JFrame{
     }
 
     private void drawGameOver() {
-        txtRW scor2 = new txtRW();
-        int olescor = Integer.valueOf(scor2.read());
-        if (score > olescor){
-            scor2.write(String.valueOf(score));
+        int oldScore = Integer.valueOf(scoreRW.read());
+        if (score > oldScore){
+            scoreRW.write(String.valueOf(score));
+            headRightContainer.setText("Hight Score: " + scoreRW.read() + "  ");
         }
         gameRunable = false;
-        TextLable.setVisible(true);
+        drawGameOverLable();
         String[] options = {"Yes", "No"};
         ImageIcon icon = new ImageIcon("images/gameOver.png");
         int result = JOptionPane.showOptionDialog(null, "game over wanna try again?       ","you lose", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, options, options[0]);
@@ -164,6 +189,12 @@ public class CoreGUI extends JFrame{
             System.exit(0);
         }
         System.out.println(result);
+    }
+
+    private void gameStart(){
+        gameRunable = true;
+        TextLable.setVisible(false);
+        headLeftContainer.setVisible(true);
     }
 
     private void gameRestart() {
@@ -180,7 +211,7 @@ public class CoreGUI extends JFrame{
         heartCount = 0;
     }
 
-    public void playingDelayVersion() {
+    public void playing() {
         // generate probabilities how many mole will show
         int[] arrPos = new int[3];
         probMultiHole = (int) (Math.random() * 10);
@@ -228,7 +259,7 @@ public class CoreGUI extends JFrame{
             delay(50);
             arrMole.get(arrPos[m]).showing();
         }
-        delay(650);
+        delay(900);
 
         for (int m = 0; m < multiHole; m++) {
             if ((arrMole.get(arrPos[m]).getState()).equals("showing")) {
@@ -280,7 +311,7 @@ public class CoreGUI extends JFrame{
 
     public static void setscore(int s) {
         score += s;
-        scoreLabel.setText("Score: " + score);
+        scoreLabel.setText("  Score: " + score);
     }
 
     private static boolean isInArr(int[] arr, int pos) {

@@ -9,9 +9,8 @@ public class txtRW {
     String tx = "";
 
     public String read(){
-        System.out.println("read");
         try {
-            FileReader reader = new FileReader("leaderboard.txt");
+            FileReader reader = new FileReader("hightScore.txt");
             try (BufferedReader bufferedReader = new BufferedReader(reader)) {
                 String line;
  
@@ -27,12 +26,12 @@ public class txtRW {
     }
     public void write(String n){
         try {
-            FileWriter fwOb = new FileWriter("leaderboard.txt", false); 
+            FileWriter fwOb = new FileWriter("hightScore.txt", false); 
             PrintWriter pwOb = new PrintWriter(fwOb, false);
             pwOb.flush();
             pwOb.close();
             fwOb.close();
-            FileWriter writer = new FileWriter("leaderboard.txt", true);
+            FileWriter writer = new FileWriter("hightScore.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             writer.write("");
             writer.flush();
